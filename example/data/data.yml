@@ -1,0 +1,249 @@
+---
+stlevel: GRADO SUPERIOR
+stname: ADMINISTRADOR DE SISTEMAS INFORMÁTICOS EN RED
+modkey: 13
+modname: SISTEMAS DE GESTIÓN EMPRESARIAL
+date: 01/03/2023
+criteria:
+- Se es capaz de sumar
+- Se es capaz de restar
+- Se es capaz de multiplicar
+- Se es capaz de dividir
+
+
+questions:
+- ¿Cuál es el resultado de sumar 1 + 1?:
+    img: class_two_instances.png
+    res:
+    - 2
+    - 4 
+    - 11 
+    - NaN
+
+- ¿Cuál es el resultado de la resta 2 - 1?:
+    img: class_one_parameter.png
+    res:
+    - 1
+    - 6
+    - 21
+    - NaN
+
+- ¿Cuál es el resultado de la multiplicación 3 * 4?:
+    img: class_attribute_print.png
+    res:
+    - 12
+    - 34
+    - 7
+    - NaN
+
+- ¿Cuál es el resultado de dividir 4 / 2?:
+    res:
+    - 2
+    - 7
+    - 42
+    - 3
+
+- ¿Cuál es el resultado de sumar 5 + 1?:
+    img: class_two_instances.png
+    res:
+    - 6
+    - 4 
+    - 11 
+    - NaN
+
+- ¿Cuál es el resultado de la resta 6 - 1?:
+    img: class_one_parameter.png
+    res:
+    - 5
+    - 6
+    - 21
+    - NaN
+
+- ¿Cuál es el resultado de la multiplicación 7 * 4?:
+    img: class_attribute_print.png
+    res:
+    - 28
+    - 34
+    - 7
+    - NaN
+
+- ¿Cuál es el resultado de dividir 8 / 2?:
+    res:
+    - 4
+    - 7
+    - 42
+    - 3
+
+- ¿Cuál es el resultado de sumar 9 + 1?:
+    img: class_two_instances.png
+    res:
+    - 10
+    - 4 
+    - 11 
+    - NaN
+
+- ¿Cuál es el resultado de la resta 10 - 1?:
+    img: class_one_parameter.png
+    res:
+    - 9
+    - 6
+    - 21
+    - NaN
+
+- ¿Cuál es el resultado de la multiplicación 11 * 4?:
+    img: class_attribute_print.png
+    res:
+    - 44
+    - 34
+    - 7
+    - NaN
+
+- ¿Cuál es el resultado de dividir 12 / 2?:
+    res:
+    - 6
+    - 7
+    - 42
+    - 3
+
+- ¿Cuál es el resultado de sumar 13 + 1?:
+    img: class_two_instances.png
+    res:
+    - 14
+    - 4 
+    - 11 
+    - NaN
+
+- ¿Cuál es el resultado de la resta 14 - 1?:
+    img: class_one_parameter.png
+    res:
+    - 13
+    - 6
+    - 21
+    - NaN
+
+- ¿Cuál es el resultado de la multiplicación 15 * 4?:
+    img: class_attribute_print.png
+    res:
+    - 60
+    - 34
+    - 7
+    - NaN
+
+- ¿Cuál es el resultado de dividir 16 / 2?:
+    res:
+    - 8
+    - 7
+    - 42
+    - 3
+
+- ¿Cuál es el resultado de sumar 17 + 1?:
+    img: class_two_instances.png
+    res:
+    - 18
+    - 4 
+    - 11 
+    - NaN
+
+- ¿Cuál es el resultado de la resta 18 - 1?:
+    img: class_one_parameter.png
+    res:
+    - 17
+    - 6
+    - 21
+    - NaN
+
+- ¿Cuál es el resultado de la multiplicación 19 * 4?:
+    img: class_attribute_print.png
+    res:
+    - 76
+    - 34
+    - 7
+    - NaN
+
+- ¿Cuál es el resultado de dividir 20 / 2?:
+    res:
+    - 10
+    - 7
+    - 42
+    - 3
+
+- ¿Cuál es el resultado de sumar 21 + 1?:
+    img: class_two_instances.png
+    res:
+    - 22
+    - 4 
+    - 11 
+    - NaN
+
+- ¿Cuál es el resultado de la resta 22 - 1?:
+    img: class_one_parameter.png
+    res:
+    - 21
+    - 6
+    - 21
+    - NaN
+
+- ¿Cuál es el resultado de la multiplicación 23 * 4?:
+    img: class_attribute_print.png
+    res:
+    - 92
+    - 34
+    - 7
+    - NaN
+
+- ¿Cuál es el resultado de dividir 24 / 2?:
+    res:
+    - 12
+    - 7
+    - 42
+    - 3
+
+- ¿Cuál es el resultado de sumar 25 + 1?:
+    img: class_two_instances.png
+    res:
+    - 26
+    - 4 
+    - 11 
+    - NaN
+
+- ¿Cuál es el resultado de la resta 26 - 1?:
+    img: class_one_parameter.png
+    res:
+    - 25
+    - 6
+    - 21
+    - NaN
+
+- ¿Cuál es el resultado de la multiplicación 27 * 4?:
+    img: class_attribute_print.png
+    res:
+    - 108
+    - 34
+    - 7
+    - NaN
+
+- ¿Cuál es el resultado de dividir 28 / 2?:
+    res:
+    - 14
+    - 7
+    - 42
+    - 3
+
+- ¿Cuál es el resultado de sumar 29 + 1?:
+    img: class_two_instances.png
+    res:
+    - 30
+    - 4 
+    - 11 
+    - NaN
+
+- ¿Cuál es el resultado de la resta 30 - 1?:
+    img: class_one_parameter.png
+    res:
+    - 29
+    - 6
+    - 21
+    - NaN
+
+
+...
