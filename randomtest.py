@@ -21,90 +21,111 @@ RULES = [
     (20,2)
 ]
 
+def first_key(q):
+    return list(q.keys())[0]
+
+def first_value(q):
+    return q[first_key(q)]
+
+def resps(q):
+    return first_value(q)['res']
+
 def are_the_same_question(q1, q2):
     def q1_in_q2(q1, q2):
-        for k1 in q1.keys():
-            if k1 not in q2:
+        for v in q1:
+            if v not in q2:
                 return False
-            for v1 in q1[k1]:
-                if v1 not in q2[k1]:
-                    return False
         return True
+
+    if first_key(q1) != first_key(q2):
+        return False
     
-    return q1_in_q2(q1, q2) and q1_in_q2(q2, q1)
+    return q1_in_q2(resps(q1), resps(q2)) and \
+           q1_in_q2(resps(q2), resps(q1))
 
 def randomize_questions(questions):
     random.shuffle(questions)
     for q in questions:
-        for v in q.values():
-            random.shuffle(v)
+        random.shuffle(resps(q))
 
 def get_response_ix(q, qorgs):
     for qorg in qorgs:
         if are_the_same_question(q,qorg):
-            key = list(q.keys())[0]
-            return q[key].index(qorg[key][0])
+            ok_res = resps(qorg)[0]
+            return resps(q).index(ok_res)
     raise ValueError()
 
-def get_qr_plain(responses):
-    content = b'\x01'
+def get_qr_plain(exam, responses):
+    content = b'\x01' # Version
+    content += exam.to_bytes(2,"big") # Number of exam
     for r in responses:
-        content += r.to_bytes(1, byteorder='little')
+        content += r.to_bytes(1, 'little')
     return content
 
 def get_responses(questions, qorgs):
     return [get_response_ix(q, qorgs) for q in questions]
 
-def encrypt (clear, password):
+def encrypt (exam, clear, password):
     m = hashlib.sha256()
-    m.update(password)
-    pbytes = m.digest()
+    m.update(password+exam.to_bytes(2, 'big')) # Exam number serves as salt
+    pbytes = b'\x00\x00\x00' + m.digest()
     return bytes([clear[i] ^ pbytes[i % len(pbytes)] for i in range(len(clear)) ])
-
-def first_key(q):
-    return list(q.keys())[0]
 
 def apply_rules(questions, qorgs, rules):
     for rule in rules:
+        if rule[0] >= len(questions):
+            continue
         q = questions[rule[0]]
         wanted_res = rule[1]
         old_res = get_response_ix(q, qorgs)
-        qres = q[first_key(q)]
+        qres = resps(q)
         if old_res != wanted_res:
             qres[old_res], qres[wanted_res] = qres[wanted_res], qres[old_res]
                
 def get_qr_from_responses(i, responses, password, pfix, path):
-    qr_bytes = get_qr_plain(responses)
-    qr_crypt_bytes = encrypt(qr_bytes, password.encode("utf-8"))
+    qr_bytes = get_qr_plain(i, responses)
+    qr_crypt_bytes = encrypt(i, qr_bytes, password.encode("utf-8"))
     img = qrcode.make(base64.b64encode(qr_crypt_bytes))
     qrf = f"{pfix}_{i}.png"
     exqr = os.path.join(path, qrf)
     img.save(exqr)
     return os.path.abspath(exqr).replace('\\', '/')
 
-def treat_responses(tres, path):
+def treat_responses(rs, path):
     res_str = "Estas son las respuestas de los exámenes:\n"
-    for i in range(len(tres)):
+    for i in range(len(rs)):
         nexam = i+1
         res_str += f"Respuestas al examen {nexam}\n"
-        for j in range(len(tres[i])):
+        for j in range(len(rs[i])):
             nres = j +1
-            res_str += f"{nres} {chr((tres[i][j] + ord('a')))}\n"
+            res_str += f"{nres} {chr((rs[i][j] + ord('a')))}\n"
     tts = gTTS(res_str, lang='es')
     tts.save(os.path.join(path,"responses.mp3"))
     with open(os.path.join(path, 'responses.txt'), "w") as f:
         f.write(res_str)
 
-def get_pdfs(num_exams, data, path, template, password):
+def adjust_image_paths (questions, path):
+    for q in questions:
+        qv = first_value(q)
+        if 'img' in qv:
+            img_rel_fname = os.path.join(path,qv['img'])
+            img_abs_fname = os.path.abspath(img_rel_fname)
+            qv['img'] = img_abs_fname.replace('\\','/')
+
+def get_pdfs(num_exams, data, path, template, password, dpath):
     pdfs = []
     options = {
         'page-size': 'A4',
-        'margin-top': '1.5cm',
+        'margin-top': '2.0cm',
         'margin-right': '1.5cm',
         'margin-bottom': '1.5cm',
-        'margin-left': '1.5cm',
+        'margin-left': '25mm',
         'encoding': "UTF-8",
-        'enable-local-file-access': None
+        'enable-local-file-access': None,
+        'header-right': 'Página [page] de [topage]',
+        'header-spacing': '3',
+        'header-font-size': '8',
+        # 'minimum-font-size': '12',
         # 'custom-header': [
         #     ('Accept-Encoding', 'gzip')
         # ],
@@ -117,6 +138,7 @@ def get_pdfs(num_exams, data, path, template, password):
     }   
     pfix = uuid.uuid4().hex
     questions = data['questions']
+    adjust_image_paths(questions, dpath)
     org_questions = copy.deepcopy(questions)
     total_responses = []
     for i in range(num_exams):
@@ -125,7 +147,8 @@ def get_pdfs(num_exams, data, path, template, password):
         responses = get_responses(questions, org_questions)
         total_responses.append(responses)
         qr = get_qr_from_responses(i, responses, password, pfix, path)
-        exid = f"Copia {i+1} de {num_exams}"
+        exid = f"Examen {i+1} de {num_exams}"
+        options['header-left'] = f'{exid}'
         content = template.render(questions=questions,
                                   stlevel=data['stlevel'],
                                   stname=data['stname'],
@@ -202,6 +225,7 @@ def main():
 
     template_dir, template_basename = get_dir_basename(args.template)  
     result_dir, result_basename = os.path.split(args.result)
+    data_dir, _ = os.path.split(args.data)
 
     num_exams = args.num_exams
 
@@ -213,7 +237,7 @@ def main():
 
     environment = Environment(loader=FileSystemLoader(template_dir))
     template = environment.get_template(template_basename)
-    pdfs = get_pdfs(num_exams, data, result_dir, template, args.password)
+    pdfs = get_pdfs(num_exams, data, result_dir, template, args.password, data_dir)
     merge_pdfs(pdfs, args.result)
 
                      
