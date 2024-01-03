@@ -1,0 +1,169 @@
+<html></html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    
+    <style type="text/css">
+        .pbreak {
+            page-break-before: always;
+        }
+        ol {
+            margin-left: 3mm;
+        }
+        table, tr, td, th, tbody, thead, tfoot, ol, .nopbreak {
+            page-break-inside: avoid !important;
+            border-collapse: collapse;
+            font-size: 18px; 
+        }
+        p {
+            font-size: 18px;
+        } 
+    </style>
+</head>
+<body>
+    
+<table border="2" >
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 2%" />
+<col style="width: 3%" />
+<col style="width: 26%" />
+<col style="width: 22%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header" bgcolor="lightgrey">
+<th colspan="3" >
+Ciclo Formativo <u>{{ stlevel }}:</u>
+</th>
+<th colspan="2" ><strong>{{ stname }}</strong></th>
+<th><strong>IFCM01</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd" bgcolor="lightgrey">
+<td>Módulo Profesional Clave: <strong>{{ modkey }}</strong></td>
+<td colspan="5"><strong>{{ modname }}</strong></td>
+</tr>
+<tr class="even">
+<td colspan="2">Nº de Expediente:</td>
+<td colspan="2">Nif:</td>
+<td colspan="2">Fecha: {{ date }}</td>
+</tr>
+<tr class="odd">
+<td colspan="6">Nombre y Apellidos:</td>
+</tr>
+</tbody>
+</table>
+<!-- <p>{{ exid }}</p> -->
+<p>
+    <img src="{{ qr }}" width="100" height="100">
+</p>
+<p><strong>Criterios de Calificación de la prueba:</strong></p>
+<ul>
+{% for crit in criteria %}
+<li><blockquote>
+<p>{{ crit }}</p>
+</blockquote></li>
+{% endfor %}
+</ul>
+
+<p><strong>Instrucciones e instrumentos permitidos para su
+realización:</strong></p>
+<ul>
+<li><p><strong>El examen consta de 30 preguntas con cuatro respuestas
+posibles.</strong></p></li>
+<li><p><strong>En cada pregunta hay solo una respuesta
+válida</strong></p></li>
+<li><p><strong>Cada respuesta correcta suma 1/3 de
+punto.</strong></p></li>
+<li><p><strong>Cada error resta 1/9 de punto.</strong></p></li>
+<li><p><strong>El aprobado se consigue con 5 puntos</strong></p></li>
+<li><p><strong>Las preguntas no contestadas no suman ni restan
+puntos.</strong></p></li>
+<li><p><strong>El examen se realizará con bolígrafo, marcando, en cada
+pregunta, la respuesta que el alumno considere correcta. La marca será
+un círculo sobre el número de la pregunta.</strong></p></li>
+<li><p><strong>Si se desea corregir una respuesta, hay que tachar el
+número de la respuesta que se quiera corregir y rodear el de la nueva
+respuesta.</strong></p></li>
+<li><p><strong>Se considerarán como no contestadas las preguntas en las
+que no haya ninguna respuesta marcada.</strong></p></li>
+<li><p><strong>Se considerarán como erróneas las preguntas en que haya
+varias respuestas (más de un círculo sin tachar)</strong></p></li>
+</ul>
+<p class="pbreak"><strong>Enunciado:</strong></p>
+<ol type="1">
+{% for q in questions %}
+<li class="nopbreak">
+{%   for k in q.keys() %}
+<p><strong>{{ k }}</strong></p>
+{%     if 'img' in q[k] %}
+<br/><img src="{{ q[k]['img'] }}" ><br/>
+{%     endif %}
+<ol type="a">
+{%     for r in q[k]['res'] %}
+<li><p>{{ r }}</p></li>
+{%     endfor %}
+{%   endfor %}
+</ol>
+</li>
+{% endfor %}
+</ol>
+
+<p class="pbreak"><strong>Incidencias durante la prueba:</strong></p>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<table border="2">
+<colgroup>
+        <col style="width: 30%" />
+        <col style="width: 10%" />
+        <col style="width: 30%" />
+        <col style="width: 10%" />
+</colgroup>
+
+<tr class="header">
+<th><strong>Firma Alumno:</strong></th>
+<th><strong>Fecha:</strong></th>
+<th><strong>Firma Docente:</strong></th>
+<th><strong>Fecha:</strong></th>
+</tr>
+<tr height="80px">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan="2" align="right">
+        <strong>CALIFICACIÓN OBTENIDA:</strong>
+    </td>
+    <td>
+
+    </td>
+</tr>
+
+</table>
+</body>
+</html>
