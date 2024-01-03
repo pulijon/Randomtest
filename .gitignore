@@ -1,0 +1,6 @@
+.vscode/
+*.log
+2022-2023/
+2023-2024/
+testenc.py
+testpass.py
