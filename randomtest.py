@@ -112,7 +112,7 @@ def adjust_image_paths (questions, path):
             img_abs_fname = os.path.abspath(img_rel_fname)
             qv['img'] = img_abs_fname.replace('\\','/')
 
-def get_pdfs(num_exams, data, path, template, password, dpath):
+def get_pdfs(num_exams, data, path, template, password, dpath, no_random):
     pdfs = []
     options = {
         'page-size': 'A4',
@@ -142,8 +142,9 @@ def get_pdfs(num_exams, data, path, template, password, dpath):
     org_questions = copy.deepcopy(questions)
     total_responses = []
     for i in range(num_exams):
-        randomize_questions(questions)
-        apply_rules(questions, org_questions, RULES)
+        if (not no_random):
+            randomize_questions(questions)
+            apply_rules(questions, org_questions, RULES)
         responses = get_responses(questions, org_questions)
         total_responses.append(responses)
         qr = get_qr_from_responses(i, responses, password, pfix, path)
@@ -202,6 +203,7 @@ def get_pars():
     DEFAULT_DATA="exam/data/data.yml"
     DEFAULT_RESULT="exam/results/exam.pdf"
     DEFAULT_NUM_EXAMS = 3
+    DEFAULT_NO_RANDOM_ACTION = 'store_true'
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--template", type=str, default=DEFAULT_TEMPLATE,
@@ -212,6 +214,9 @@ def get_pars():
                         help=f"Fichero de resultado. Por defecto, {DEFAULT_RESULT}")
     parser.add_argument("-n", "--num-exams", type=int, default=DEFAULT_NUM_EXAMS,
                         help=f"Número de exámenes. Por defecto, {DEFAULT_NUM_EXAMS}")
+    parser.add_argument("--no-random", action=DEFAULT_NO_RANDOM_ACTION,
+                    help=f"No aleatorizar respuestas. Por defecto, {DEFAULT_NO_RANDOM_ACTION == 'store_false'}")
+
     args = parser.parse_args()
     setattr(args, 'password', enter_password())
     return args
@@ -237,7 +242,7 @@ def main():
 
     environment = Environment(loader=FileSystemLoader(template_dir))
     template = environment.get_template(template_basename)
-    pdfs = get_pdfs(num_exams, data, result_dir, template, args.password, data_dir)
+    pdfs = get_pdfs(num_exams, data, result_dir, template, args.password, data_dir, args.no_random)
     merge_pdfs(pdfs, args.result)
 
                      
