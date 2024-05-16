@@ -176,13 +176,13 @@ def get_pdfs(num_exams, data, path, template, password, dpath, no_random):
     return pdfs
 
 def merge_pdfs(pdfs, fpdf):
-    finalPdf = PyPDF2.PdfFileWriter()
+    finalPdf = PyPDF2.PdfWriter()
     rpdfs = [open(pdf, "rb" ) for pdf in pdfs]
     for rpdf in rpdfs:
-        partial = PyPDF2.PdfFileReader(rpdf)
+        partial = PyPDF2.PdfReader(rpdf)
         finalPdf.append_pages_from_reader(partial)
         if (len(partial.pages) % 2) == 1:
-            finalPdf.addBlankPage()
+            finalPdf.add_blank_page()
     with open(fpdf, "wb") as wf:
         finalPdf.write(wf)
     for rpdf in rpdfs:
